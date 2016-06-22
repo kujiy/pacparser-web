@@ -28,12 +28,12 @@ This demo answers `Direct` for `http://localhost/`, `PROXY your-company-proxy:80
     $ cd pacparser-web
     $ docker-compose up
     ```
-1. Access to [http://localhost:5000/](http://localhost:5000/) or  [http://your-docker-host:5000/](http://your-docker-host:5000/) with your browser
+1. Access to [http://localhost/](http://localhost/) or  [http://your-docker-host:5000/](http://your-docker-host:5000/) with your browser
  - You can change the port in `docker-compose.yml` .
 
 ## How to Use
 1. Access your container with browsers
-    - http://localhost:5000/ or http://your-docker-host:5000/
+    - [http://localhost/](http://localhost/) or  [http://your-docker-host:5000/](http://your-docker-host:5000/)
 1. Select pac file(those are defined in `app/yourpacs.py`) and input target URL then submit
 1. You'll get pacparser answer.
 
