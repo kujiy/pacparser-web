@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  pacweb:
+    restart: always
+    image:  tiangolo/uwsgi-nginx-flask:flask
+    container_name: pacweb
+    hostname: pacweb
+    ports:
+      - "5000:80"
+    environment:
+      - PROXY=http://user:password@your-proxy.com:port
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+      - ./app:/app
+      - /etc/localtime:/etc/localtime    # to set your locale timezone
+    command: "sh /entrypoint.sh"
+#    networks:
+#      -  "your-custom-network"
+
+#networks:
+#    network:
+#      driver: bridge
+#    your-custom-network:
+#      external: true

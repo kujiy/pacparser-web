@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>pacparser-web</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> {# jquery #}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    <style type="text/css">
+    small,
+    .my-light-grey {
+        color: #d5d5d5;
+    }
+
+    .loader {
+        display: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h1>Pacparser-web <small> Talk to your .pac</small></h1>
+                <h4>What you want to ask .Pac</h4>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col s12" action="./pac" method="GET">
+                <div class="row">
+                    <div class="input-field col s12">
+                        {% if defpacs %}
+                        <select id="opt" name="opt" value="{% if opt %}{{ opt | safe }}{% endif %}">
+                            {% for defpac in defpacs %}
+                            <option value="{{ defpac }}">{{ defpac }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="opt">
+                            Pac file
+                            <span class="my-light-grey"> Defined in defurls.py</span>
+                        </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="URL or domain" type="text" id="url" name="url" value="{% if url %}{{ url | safe }}{% endif %}" class="validate">
+                        <label for="url">Search URL</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <button onclick='$(".loader").show();' class="btn-large waves-effect waves-light" type="submit" name="action">Search
+                            <i class="material-icons right">send</i>
+                        </button>
+                        <div class="loader card-panel">
+                            <i class="material-icons">info_outline</i>
+                            <span class="teal-text text-accent-4">
+        &nbsp; Wait for a while since pacparser-web is downloading your latest .pac file
+       </span>
+                            <div class="progress">
+                                <div class="indeterminate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {# error message #}
+        {% if error %}
+          <div class="row">
+            <div class="col s12 m6">
+              <div class="card red lighten-2">
+                <div class="card-content white-text">
+                  <span class="card-title"><i class="material-icons">report_problem</i> Woops!</span>
+                  <p>  {{ error }} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+         {% endif %}
+
+
+
+        <div class="card">
+            {% if opt %}
+            <div class="card-content">
+                <span class="card-title grey-text text-darken-4">
+          Search Pac File
+        </span>
+                <p>
+                    {{ opt | safe }} {% if stat %}
+                    <span class="badge">{{ stat }}</span> {% endif %}
+                </p>
+            </div>
+            {% endif %} {% if url %}
+            <div class="card-content">
+                <span class="card-title grey-text text-darken-4">
+          Search URL
+        </span>
+                <p>
+                    <a href="{{ url }}" target="_blank">{{ url }} </a>
+                </p>
+            </div>
+            {% endif %}
+        </div> {# <div class="card"> #}
+
+            {% if res %}
+            <div class="card orange darken-3  white-text">
+                <div class="card-content">
+                    <p>
+                        .PAC Answers;
+                    </p>
+                    <span class="card-title"><i class="material-icons">done</i>  {{ res }}</span>
+                </div>
+            </div>
+            {% endif %}
+            <br>
+            <br>
+
+            {% if defres %}
+            <hr>
+
+            <h4>Search results for defilned urls <small>in defurls.py</small></h4>
+            <table class="responsive-table striped">
+                <thead>
+                    <tr>
+                        <th>Search URL</th>
+                        <th>.PAC answer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in defres %}
+                    <tr>
+                        <td> <a onclick="go_to_example(this)"> {{ res.url }}</a> </td>
+                        <td> <i class="material-icons tiny">done</i> {{ res.res }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+        </div>
+        <!-- grid -->
+    </div>
+    <footer class="page-footer grey darken-1">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Pacparser-web</h5>
+                    <p>
+                        <a class="grey-text text-lighten-3" href="https://github.com/kujiy/pacparser-web">Github</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+
+    <script>
+    $(function() {
+
+        // init materialize
+        // You must initialize the select element as shown below. In addition, you will need a separate call for any dynamically generated select elements your page generates.
+        $('select').material_select();
+        $('select').material_select();
+
+        {% if opt %}
+        // select pac file pull-down
+        $("option[value='{{ opt | safe }}']").attr("selected", "selected");
+        {% endif %}
+
+    });
+
+    function go_to_example(obj) {
+
+        queries = {
+            "url": encodeURI(obj.innerText),
+            "opt": $('select#opt').val()
+        };
+
+        location.href = "./pac?" + $.param(queries)
+    }
+    </script>
+
+</html>

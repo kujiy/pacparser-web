@@ -1,0 +1,7 @@
+{
+  "name": "pacparser-web",
+  "description": "Web interface for pacparser.",
+  "image": "heroku/python",
+  "repository": "https://github.com/kujiy/pacparser-web",
+  "keywords": ["python", "flask", "pacparser", "proxy" ]
+}
