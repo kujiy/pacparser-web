@@ -22,6 +22,16 @@ This demo answers `Direct` for `http://localhost/`, `PROXY your-company-proxy:80
     $ cd pacparser-web
     $ vi app/yourpacs.py
     ```
+1. If you're behind a proxy, tell it in `docker-compose.yml`
+
+    ```sh
+    $ cd pacparser-web
+    $ vi docker-compose.yml
+
+    # Uncomment two rows and replace with your proxy (pacparser-web needs internet access)
+    environment:
+      - PROXY=http://user:password@your-proxy.com:port
+    ```
 1. Launch your container
 
     ```sh
@@ -30,6 +40,18 @@ This demo answers `Direct` for `http://localhost/`, `PROXY your-company-proxy:80
     ```
 1. Access to [http://localhost:5000/](http://localhost:5000/) or  [http://your-docker-host:5000/](http://your-docker-host:5000/) with your browser
  - You can change the port in `docker-compose.yml` .
+
+### Getting error?
+- If you are behind the proxy, set environment in `docker-compose.yml`.
+- See the docker log with the following command.
+
+    ```sh
+    $ cd pacparser-web
+    $ docker-compose logs -f
+    ```
+    > pacweb    | fatal: unable to access 'https://github.com/pacparser/pacparser.git/': 
+
+    - This log means pacparser couldn't access to internet.
 
 ## How to Use
 1. Access your container with browsers
