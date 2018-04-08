@@ -1,4 +1,4 @@
-# Web Interface for Pacparser 
+# Web Interface of Pacparser 
 Have you ever wondered "When I access to this URL, Which proxy will I use? Or direct?"
 Me helps you.
 
